@@ -34,16 +34,14 @@ Component class -> related to Product:
 - id
 - name
 - description
-- price
 
-- stock
 - image
 
 Variant class -> related to Component:
 - id
 - name
 - description
-- price (we deleted the prioces from the components to have a price for each variant)
+- price (we deleted price from the components to have it on each variant)
 
-- stock
 - image
+- stock

@@ -45,6 +45,11 @@ class ComponentsController < ApplicationController
   end
 
   def component_params
-    params.require(:component).permit(:name, variants_attributes: [ :id, :name, :price, :_destroy ])
+    params.require(:component).permit(
+      :name,
+      :stock,
+      :image,
+      variants_attributes: [ :id, :name, :price, :_destroy ],
+    )
   end
 end

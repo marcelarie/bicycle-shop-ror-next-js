@@ -4,4 +4,6 @@ class Component < ApplicationRecord
 
   validates :name, presence: true
   validates :variants, length: { minimum: 1, message: "must have at least one variant" }
+  validates :stock, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :image, presence: true
 end

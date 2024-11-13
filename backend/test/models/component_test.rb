@@ -3,7 +3,12 @@ require "test_helper"
 class ComponentTest < ActiveSupport::TestCase
   test "should be valid with at least one variant" do
     product = products(:one)
-    component = Component.new(name: "Frame", product: product)
+    component = Component.new(
+      name: "Frame",
+      product: product,
+      stock: 10,
+      image: "https://example.com/frame.jpg",
+    )
     variant = component.variants.build(name: "Small Frame", price: 200.0)
 
     assert component.valid?
@@ -11,8 +16,37 @@ class ComponentTest < ActiveSupport::TestCase
 
   test "should be invalid without variants" do
     product = products(:one)
-    component = Component.new(name: "Frame", product: product)
+    component = Component.new(
+      name: "Frame",
+      product: product,
+      stock: 10,
+      image: "https://example.com/frame.jpg",
+    )
 
+    assert_not component.valid?
+  end
+
+  test "should be invalid with empty stock" do
+    product = products(:one)
+    component = Component.new(
+      name: "Frame",
+      product: product,
+      stock: nil,
+      image: "https://example.com/frame.jpg",
+    )
+    variant = component.variants.build(name: "Small Frame", price: 200.0)
+    assert_not component.valid?
+  end
+
+  test "should be invalid with empty image" do
+    product = products(:one)
+    component = Component.new(
+      name: "Frame",
+      product: product,
+      stock: 10,
+      image: nil,
+    )
+    variant = component.variants.build(name: "Small Frame", price: 200.0)
     assert_not component.valid?
   end
 end
