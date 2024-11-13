@@ -45,6 +45,6 @@ class VariantsController < ApplicationController
   end
 
   def variant_params
-    params.require(:variant).permit(:name, :price, :stock)
+    params.require(:variant).permit(:name, :price, :stock, :image)
   end
 end

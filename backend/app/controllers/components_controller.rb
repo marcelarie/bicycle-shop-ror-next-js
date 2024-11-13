@@ -48,7 +48,7 @@ class ComponentsController < ApplicationController
     params.require(:component).permit(
       :name,
       :image,
-      variants_attributes: [:name, :price, :stock]
+      variants_attributes: [:name, :price, :stock, :image]
     )
   end
 end
