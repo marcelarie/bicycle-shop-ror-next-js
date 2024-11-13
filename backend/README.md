@@ -6,7 +6,6 @@ but it should be extensible to have other products in the future.
 It will have two main pages:
 
 1. Public shop page
-
    - [ ] Lists the products
    - [ ] Customize each product
    - [ ] Cart that displays the bikes
@@ -18,3 +17,16 @@ It will have two main pages:
 
 **Important note:**
 No need for auth, checkout or a design.
+
+## Notes
+
+We will start with a Product class, this will have the following attributes:
+- id
+- name
+- description
+- price
+
+This will come later
+- stock
+- parts -> with its own class
+- image
