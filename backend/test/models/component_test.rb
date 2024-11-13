@@ -8,7 +8,12 @@ class ComponentTest < ActiveSupport::TestCase
       product: product,
       image: "https://example.com/frame.jpg",
     )
-    variant = component.variants.build(name: "Small Frame", price: 200.0)
+    variant = component.variants.build(
+      name: "Small Frame",
+      price: 200.0,
+      stock: 10,
+      image: "https://www.google.com/img.jpg",
+    )
 
     assert component.valid?
   end

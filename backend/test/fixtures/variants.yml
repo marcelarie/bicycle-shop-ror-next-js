@@ -3,14 +3,20 @@
 one:
   name: Large frame
   price: 19.99
+  stock: 10
+  image: large_frame.jpg
   component: one
 
 two:
   name: Small frame
   price: 9.99
+  stock: 10
+  image: large_frame.jpg
   component: one
 
 three:
   name: Mega frame
   price: 59.99
+  stock: 10
+  image: large_frame.jpg
   component: two

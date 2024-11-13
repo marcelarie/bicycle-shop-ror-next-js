@@ -2,8 +2,10 @@
 
 one:
   name: Wheel
+  image: wheel.jpg
   product: one
 
 two:
   name: Seat
+  image: seat.jpg
   product: two
