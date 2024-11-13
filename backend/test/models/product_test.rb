@@ -8,7 +8,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create product" do
     assert_difference("Product.count") do
-      post products_url, params: { product: { name: "Bike", price: 100.0 } }
+      post products_url, params: { product: { name: "Bike", price: 100.0, stock: 10, image: "bike.jpg" } }
     end
     assert_response :created
   end
@@ -21,9 +21,11 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
   test "should update product" do
     product = products(:one)
-    patch product_url(product), params: { product: { price: 200.0 } }
+    patch product_url(product), params: { product: { price: 200.0, stock: 15, image: "new_bike.jpg" } }
     assert_response :success
     assert_equal 200.0, product.reload.price
+    assert_equal 15, product.reload.stock
+    assert_equal "new_bike.jpg", product.reload.image
   end
 
   test "should destroy product" do

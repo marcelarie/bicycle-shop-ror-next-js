@@ -26,15 +26,13 @@ Product class:
 - description
 - price
 - components -> with its own class
-
-- stock
 - image
+- stock
 
 Component class -> related to Product:
 - id
 - name
 - description
-
 - image
 
 Variant class -> related to Component:
@@ -42,6 +40,5 @@ Variant class -> related to Component:
 - name
 - description
 - price (we deleted price from the components to have it on each variant)
-
 - image
 - stock
