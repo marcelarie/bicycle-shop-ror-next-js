@@ -1,6 +1,6 @@
 class VariantsController < ApplicationController
   before_action :set_component
-  before_action :set_variant, only: [ :show, :update, :destroy ]
+  before_action :set_variant, only: [:show, :update, :destroy]
 
   def index
     @variants = @component.variants
@@ -45,6 +45,6 @@ class VariantsController < ApplicationController
   end
 
   def variant_params
-    params.require(:variant).permit(:name, :price)
+    params.require(:variant).permit(:name, :price, :stock)
   end
 end

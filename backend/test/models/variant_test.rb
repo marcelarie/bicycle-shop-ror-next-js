@@ -21,4 +21,10 @@ class VariantTest < ActiveSupport::TestCase
 
     assert_not variant.valid?
   end
+
+  test "should be invalid with empty stock" do
+    component = components(:one)
+    variant = Variant.new(name: "Small Frame", price: 200.0, stock: "", component: component)
+    assert_not variant.valid?
+  end
 end
