@@ -25,8 +25,16 @@ We will start with a Product class, this will have the following attributes:
 - name
 - description
 - price
+- components -> with its own class
 
-This will come later
 - stock
-- parts -> with its own class
+- image
+
+Then we will create the Component class, it will be related to the Product class:
+- id
+- name
+- description
+- price
+
+- stock
 - image
