@@ -1,11 +1,16 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  price: 9.99
+  name: Large frame
+  price: 19.99
   component: one
 
 two:
-  name: MyString
+  name: Small frame
   price: 9.99
+  component: one
+
+three:
+  name: Mega frame
+  price: 59.99
   component: two

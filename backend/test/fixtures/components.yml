@@ -2,10 +2,8 @@
 
 one:
   name: Wheel
-  price: 100
   product: one
 
 two:
   name: Seat
-  price: 120
   product: two

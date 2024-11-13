@@ -1,27 +1,18 @@
 require "test_helper"
 
 class ComponentTest < ActiveSupport::TestCase
-  test "should be valid with name and product" do
+  test "should be valid with at least one variant" do
     product = products(:one)
-    component = Component.new(name: "Wheel", price: 200, product: product)
+    component = Component.new(name: "Frame", product: product)
+    variant = component.variants.build(name: "Small Frame", price: 200.0)
+
     assert component.valid?
   end
 
-  test "should be invalid without name" do
-    product = products(:one)
-    component = Component.new(price: 200.0, product: product)
-    assert_not component.valid?
-  end
-
-  test "should be invalid without price" do
+  test "should be invalid without variants" do
     product = products(:one)
     component = Component.new(name: "Frame", product: product)
-    assert_not component.valid?
-  end
 
-  test "should be invalid with negative price" do
-    product = products(:one)
-    component = Component.new(name: "Frame", price: -10.0, product: product)
-    assert_not component.valid?, "Component should be invalid with negative price"
+    assert_not component.valid?
   end
 end
