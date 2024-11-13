@@ -1,6 +1,6 @@
 class ComponentsController < ApplicationController
   before_action :set_product
-  before_action :set_component, only: [ :show, :update, :destroy ]
+  before_action :set_component, only: [:show, :update, :destroy]
 
   def index
     @components = @product.components
@@ -49,7 +49,7 @@ class ComponentsController < ApplicationController
       :name,
       :stock,
       :image,
-      variants_attributes: [ :id, :name, :price, :_destroy ],
+      variants_attributes: [:name, :price],
     )
   end
 end
