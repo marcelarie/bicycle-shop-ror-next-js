@@ -20,7 +20,7 @@ No need for auth, checkout or a design.
 
 ## Notes
 
-We will start with a Product class, this will have the following attributes:
+Product class:
 - id
 - name
 - description
@@ -30,11 +30,20 @@ We will start with a Product class, this will have the following attributes:
 - stock
 - image
 
-Then we will create the Component class, it will be related to the Product class:
+Component class -> related to Product:
 - id
 - name
 - description
 - price
+
+- stock
+- image
+
+Variant class -> related to Component:
+- id
+- name
+- description
+- price (we deleted the prioces from the components to have a price for each variant)
 
 - stock
 - image

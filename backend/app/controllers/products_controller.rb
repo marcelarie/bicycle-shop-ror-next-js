@@ -33,6 +33,8 @@ class ProductsController < ApplicationController
     head :no_content
   end
 
+  private
+
   def set_product
     @product = Product.find(params[:id])
   end
