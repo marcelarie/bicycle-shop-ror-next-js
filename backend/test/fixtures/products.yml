@@ -1,13 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  description: MyText
-  price: MyString
-  decimal: MyString
+  name: FirstBike
+  description: This bike is yellow
+  price: 100
 
 two:
-  name: MyString
-  description: MyText
-  price: MyString
-  decimal: MyString
+  name: SecondBike
+  description: This bike is red
+  price: 10000
