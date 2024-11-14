@@ -60,6 +60,9 @@ There is no need for a checkout or a payment system.
 2. The cart will handle this combination
 3. In the future there will be a validation step
 
+**NOTE:** 
+For now the Cart will not be implemented, the validation endpoint is enough.
+
 ## Validation
 
 A product has multiple components
