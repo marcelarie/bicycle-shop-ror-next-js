@@ -60,7 +60,7 @@ There is no need for a checkout or a payment system.
 2. The cart will handle this combination
 3. In the future there will be a validation step
 
-**NOTE:** 
+**NOTE:**
 For now the Cart will not be implemented, the validation endpoint is enough.
 
 ## Validation
@@ -85,3 +85,35 @@ Steps:
 - The admin will add more stock in the future
 
 ## Admin
+
+The admin page should be simple:
+
+1. No need for auth
+2. Create products, components and variants
+3. Delete products, components and variants
+4. Manage stock
+5. Update variants
+
+There is no need to create and Admin class if there is no auth for now.
+When the auth is needed the endpoints could move to a Admin/namespace subclass.
+For now we can use the endpoints as they are.
+
+```ruby
+# routes.rb
+namespace :admin do
+ post "products", to: "products#create"
+ delete "products/:id", to: "products#destroy"
+ patch "products/:id/stock", to: "products#update_stock"
+
+ post "products/:product_id/components", to: "components#create"
+ delete "components/:id", to: "components#destroy"
+ patch "components/:id/stock", to: "components#update_stock"
+
+ post "components/:component_id/variants", to: "variants#create"
+ delete "variants/:id", to: "variants#destroy"
+ patch "variants/:id", to: "variants#update"
+ patch "variants/:id/stock", to: "variants#update_stock"
+end
+
+# rest of the routes for non admins
+```
