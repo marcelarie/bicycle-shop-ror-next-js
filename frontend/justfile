@@ -1,0 +1,11 @@
+run:
+    pnpm dev --port 4000
+
+build:
+    pnpm build
+
+test:
+    pnpm test
+
+lint:
+    pnpm lint
