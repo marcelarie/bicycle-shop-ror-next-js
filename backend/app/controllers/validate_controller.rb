@@ -11,6 +11,28 @@ class ValidateController < ApplicationController
              id: variant_id,
              has_invalid_variants: !invalid_variants.empty?,
              invalid_variants: parsed_variants
-           }, status: :ok
+           },
+           status: :ok
+  end
+
+  def combination
+    variant_ids = params[:ids]
+
+    if variant_ids.blank? || !variant_ids.is_a?(Array)
+      render json: { error: "Invalid or missing variant ids" },
+             status: :bad_request and return
+    end
+
+    invalid_variants = variant_ids.map do |variant_id|
+      {
+        variant_id: variant_id,
+        conflicts: Validate.validate_component(variant_id)
+      }
+    end.reject { |v| v[:conflicts].empty? }
+
+    render json: {
+      valid: invalid_variants.empty?,
+      invalid_variants: invalid_variants
+    }
   end
 end
