@@ -17,5 +17,5 @@ Layout/EndAlignment:
   EnforcedStyleAlignWith: variable
 
 Layout/LineLength:
-  Max: 80
+  Max: 85
 
