@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   post "validate/combination", to: "validate#combination"
   patch "products/:product_id/stock", to: "stock#update_product"
   patch "variants/:variant_id/stock", to: "stock#update_variant"
+  post "transactions/purchase", to: "transactions#purchase"
 
   resources :products do
     resources :components, only: [ :index, :show, :create, :update, :destroy ] do
