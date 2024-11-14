@@ -18,7 +18,7 @@ It will have two main pages:
 **Important note:**
 No need for auth, checkout or a design.
 
-## Notes
+## Products
 
 Product class:
 - id
@@ -42,3 +42,35 @@ Variant class -> related to Component:
 - price (we deleted price from the components to have it on each variant)
 - image
 - stock
+
+**Note:** 
+No need to have stock as its own class, given that the stock needs to be managed
+by each variant and there is only one store for the moment.
+
+# Cart
+
+The cart will be a simple list of the products that the user has added to it.
+There is no need for a checkout or a payment system.
+
+1. The user selects a combination of components with a product
+2. The cart will handle this combination
+3. In the future there will be a validation step
+
+## Validation
+
+A product has multiple components
+Each component has multiple variants
+
+The user can select multiple components per product and one variant per component
+
+Steps:
+1. User selects a product
+2. Selects a component
+4. Selects a variant
+5. Then all the other combinations that are not valid appear as disabled
+
+## Stock management
+
+
+## Admin 
+
