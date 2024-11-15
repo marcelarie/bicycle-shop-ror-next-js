@@ -2,12 +2,12 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [ :show, :update, :destroy ]
 
   def index
-    @products = Product.all
-    render json: @products
+    @products = Product.includes(components: :variants).all
+    render json: @products.to_json(include: { components: { include: :variants } })
   end
 
   def show
-    render json: @product
+    render json: @product.to_json(include: { components: { include: :variants } })
   end
 
   def create
@@ -36,7 +36,7 @@ class ProductsController < ApplicationController
   private
 
   def set_product
-    @product = Product.find(params[:id])
+    @product = Product.includes(components: :variants).find(params[:id])
   end
 
   def product_params
