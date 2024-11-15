@@ -1,4 +1,7 @@
-import React from "react";
+"use client";
+
+import { useParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 interface Variant {
   id: number;
@@ -25,9 +28,7 @@ interface Product {
 async function fetchProductData(productId: string): Promise<Product> {
   const productRes = await fetch(
     `http://localhost:3000/products/${productId}`,
-    {
-      cache: "no-store", // Ensures fresh data on every request
-    },
+    { cache: "no-store" },
   );
 
   if (!productRes.ok) {
@@ -66,12 +67,28 @@ async function fetchProductData(productId: string): Promise<Product> {
   return { ...product, components: componentsWithVariants };
 }
 
-const ProductPage = async ({ params }: { params: { id: string } }) => {
-  const { id } = params;
+const ProductPage = () => {
+  const { id } = useParams<{ id: string }>();
+  const [product, setProduct] = useState<Product | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchProductData(id);
+      setProduct(data);
+    };
+
+    fetchData();
+  }, [id]);
+
+  if (!product) {
+    return (
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 py-8 flex items-center justify-center">
+        <h1 className="text-2xl text-gray-900 dark:text-white">Loading...</h1>
+      </div>
+    );
+  }
 
   try {
-    const product = await fetchProductData(id);
-
     return (
       <div className="min-h-screen bg-gray-100 dark:bg-gray-900 py-8">
         <div className="container mx-auto">
