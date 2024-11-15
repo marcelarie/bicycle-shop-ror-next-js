@@ -1,7 +1,7 @@
 "use client";
 
+import { Component } from "@/types";
 import ProductVariant from "./ProductVariant";
-import { Component } from "../product/[id]/page";
 
 type Props = {
   component: Component;

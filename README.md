@@ -79,10 +79,12 @@ Steps:
 
 ## Stock management
 
-- The stock management will be handled by products and variants.
-- The stock will be updated when is bought.
-  This will be a really simple endpoint that returns true or false if it was successful
-- The admin will add more stock in the future
+The stock management will be handled by products and variants.
+
+- [x] The stock will be updated when is bought.
+- [x] The admin will manage the stock
+- [ ] Client-side validation for prohibited combinations
+- [ ] Revalidate cart items in the FE and BE
 
 ## Admin
 
@@ -117,5 +119,3 @@ end
 
 # rest of the routes for non admins
 ```
-
-https://google.es

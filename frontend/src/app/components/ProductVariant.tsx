@@ -1,4 +1,4 @@
-import { Component, Variant } from "../product/[id]/page";
+import { Component, Variant } from "@/types";
 
 type Props = {
   component: Component;
@@ -18,20 +18,31 @@ const ProductVariant = ({
   handleSelectVariant,
 }: Props) => {
   return (
-    <button
-      key={variant.id}
-      className="p-3 border dark:border-gray-700 rounded-lg flex justify-between items-center bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-      style={{
-        borderColor: selected ? "#2563EB" : "transparent",
-        borderWidth: 2,
-      }}
-      onClick={(e) => handleSelectVariant(e, component.id, variant.id)}
-    >
-      <span className="text-gray-900 dark:text-white">{variant.name}</span>
-      <span className="font-bold text-gray-900 dark:text-white">
-        ${variant.price}
-      </span>
-    </button>
+    <div className="flex flex-col items-center justify-center space-y-2">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={variant.image}
+        width={200}
+        style={{
+          borderColor: selected ? "#2563EB" : "#374151",
+          borderWidth: 2,
+        }}
+        alt={variant.name}
+        className="rounded-md"
+      />
+      <button
+        key={variant.id}
+        className="p-3 border dark:border-gray-700 rounded-lg flex justify-between items-center bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+        onClick={(e) => handleSelectVariant(e, component.id, variant.id)}
+      >
+        <div className="flex flex-row items-center space-x-2">
+          <span className="text-gray-900 dark:text-white">{variant.name}</span>
+          <span className="font-bold text-gray-900 dark:text-white">
+            ${variant.price}
+          </span>
+        </div>
+      </button>
+    </div>
   );
 };
 
