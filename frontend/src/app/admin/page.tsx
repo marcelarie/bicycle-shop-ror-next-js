@@ -1,19 +1,7 @@
 "use client";
 
+import { Component } from "@/types";
 import { useState } from "react";
-
-interface Variant {
-  name: string;
-  price: string;
-  stock: string;
-  image: string;
-}
-
-interface Component {
-  name: string;
-  image: string;
-  variants: Variant[];
-}
 
 interface FormData {
   name: string;

@@ -18,7 +18,7 @@ const Cart = ({ reload }: { reload: boolean }) => {
   }, [reload]);
 
   return (
-    <div className="flex items-center justify-between p-4 mb-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+    <div className="flex items-center justify-between p-4 mb-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm gap-4">
       <div className="flex items-center gap-4">
         <h3 className="text-xl font-semibold">Shopping Cart</h3>
         <span className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 rounded-full">

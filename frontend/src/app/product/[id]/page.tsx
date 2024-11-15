@@ -2,30 +2,9 @@
 
 import Cart from "@/app/components/Cart";
 import ProductComponent from "@/app/components/ProductComponent";
+import { Component, Product, Variant } from "@/types";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-
-export interface Variant {
-  id: number;
-  name: string;
-  price: number;
-}
-
-export interface Component {
-  id: number;
-  name: string;
-  description: string;
-  variants: Variant[];
-}
-
-export interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  components: Component[];
-}
 
 async function fetchProductData(productId: string): Promise<Product> {
   const productRes = await fetch(
