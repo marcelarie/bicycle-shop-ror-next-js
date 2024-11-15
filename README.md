@@ -8,13 +8,13 @@ It will have two main pages:
 1. Public shop page
 
    - [x] Lists the products
-   - [ ] Customize each product
-   - [ ] Cart that displays the bikes
+   - [x] Customize each product
+   - [x] Cart that displays the bikes
 
 2. Admin page
-   - [ ] Create bikes
-   - [ ] Delete bikes
-   - [ ] Manage stock and product parts
+   - [x] Create bikes
+   - [x] Delete bikes
+   - [x] Manage stock and product parts
 
 **Important note:**
 No need for auth, checkout or a design.
