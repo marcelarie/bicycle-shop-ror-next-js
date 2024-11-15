@@ -48,9 +48,20 @@ async function fetchProductData(productId: string): Promise<Product> {
   return { ...product, components: componentsWithVariants };
 }
 
+type PriceState = {
+  price: number;
+  lastComponentId: number;
+  lastPrice: number;
+};
+
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
+  const [priceState, setPriceState] = useState<PriceState>({
+    price: Number(product?.price) || 0,
+    lastComponentId: 0,
+    lastPrice: 0,
+  });
   const [selectedVariants, setSelectedVariants] = useState<
     Record<number, number>
   >({});
@@ -58,26 +69,78 @@ const ProductPage = () => {
   const isCartDisabled =
     Object.keys(selectedVariants).length !== product?.components.length;
 
+  useEffect(() => {
+    setPriceState((prev) => ({
+      ...prev,
+      price: Number(product?.price) || 0,
+    }));
+  }, [product?.price]);
+
+  const calculateTotalPrice = (variants: Record<number, number>) => {
+    const basePrice = Number(product?.price) || 0;
+
+    const variantsTotal = Object.entries(variants).reduce(
+      (total, [componentId, variantId]) => {
+        const component = product?.components.find(
+          (component) => component.id === Number(componentId),
+        );
+
+        const variant = component?.variants.find(
+          (variant) => variant.id === variantId,
+        );
+
+        return total + (Number(variant?.price) || 0);
+      },
+      0,
+    );
+
+    return basePrice + variantsTotal;
+  };
+
   const handleSelectVariant = (
     e: React.MouseEvent<HTMLButtonElement>,
     componentId: number,
     variantId: number,
+    variantPrice: number,
   ) => {
     e.preventDefault();
     const isSelected = selectedVariants[componentId] === variantId;
 
-    setSelectedVariants((prev) => {
-      if (isSelected) {
+    if (isSelected) {
+      setSelectedVariants((prev) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { [componentId]: _, ...rest } = prev;
-        return rest;
-      }
 
-      return {
-        ...prev,
-        [componentId]: variantId,
-      };
-    });
+        const newTotal = calculateTotalPrice(rest);
+
+        setPriceState((prevState) => ({
+          ...prevState,
+          price: newTotal,
+          lastComponentId: 0,
+          lastPrice: 0,
+        }));
+
+        return rest;
+      });
+    } else {
+      setSelectedVariants((prev) => {
+        const newVariants = {
+          ...prev,
+          [componentId]: variantId,
+        };
+
+        const newTotal = calculateTotalPrice(newVariants);
+
+        setPriceState((prevState) => ({
+          ...prevState,
+          price: newTotal,
+          lastComponentId: componentId,
+          lastPrice: variantPrice,
+        }));
+
+        return newVariants;
+      });
+    }
   };
 
   const handleAddToCart = () => {
@@ -164,6 +227,9 @@ const ProductPage = () => {
                         handleSelectVariant={handleSelectVariant}
                       />
                     ))}
+                  </div>
+                  <div className="text-lg font-bold text-gray-900 dark:text-white mt-8">
+                    Total Price: {Number(priceState.price).toFixed(2)} EUR
                   </div>
                   <button
                     disabled={isCartDisabled}

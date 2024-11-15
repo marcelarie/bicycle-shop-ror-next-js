@@ -8,6 +8,7 @@ type Props = {
     e: React.MouseEvent<HTMLButtonElement>,
     componentId: number,
     variantId: number,
+    variantPrice: number,
   ) => void;
 };
 
@@ -33,7 +34,9 @@ const ProductVariant = ({
       <button
         key={variant.id}
         className="p-3 border dark:border-gray-700 rounded-lg flex justify-between items-center bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-        onClick={(e) => handleSelectVariant(e, component.id, variant.id)}
+        onClick={(e) =>
+          handleSelectVariant(e, component.id, variant.id, variant.price)
+        }
       >
         <div className="flex flex-row items-center space-x-2">
           <span className="text-gray-900 dark:text-white">{variant.name}</span>

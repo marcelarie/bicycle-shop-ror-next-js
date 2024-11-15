@@ -10,6 +10,7 @@ type Props = {
     e: React.MouseEvent<HTMLButtonElement>,
     componentId: number,
     variantId: number,
+    variantPrice: number,
   ) => void;
 };
 
