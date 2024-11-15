@@ -2,14 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Cart from "./components/Cart";
-
-export interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-}
+import { Product } from "@/types";
 
 const ShopPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -52,6 +45,7 @@ const ShopPage = () => {
               <h2 className="text-xl font-semibold mt-4">{product.name}</h2>
               <p className="mt-2">{product.description}</p>
               <p className="text-lg font-bold mt-4">${product.price}</p>
+              <p className="text-sm text-gray-500 mt-2">{product.stock} in stock</p>
               <div className="mt-4 flex gap-2">
                 <a
                   href={`/product/${product.id}`}

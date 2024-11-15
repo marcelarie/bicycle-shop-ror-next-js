@@ -136,9 +136,14 @@ const ProductPage = () => {
               </div>
 
               <div className="lg:w-2/3 w-full">
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                  {product.name}
-                </h1>
+                <div className="flex flex-row gap-4 items-center">
+                  <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                    {product.name}
+                  </h1>
+                  <p className="text-lg font-bold text-gray-500 dark:text-gray-500">
+                    {product.stock} in stock
+                  </p>
+                </div>
                 <p className="text-gray-700 dark:text-gray-300 mb-6">
                   {product.description}
                 </p>
