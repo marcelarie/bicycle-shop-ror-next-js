@@ -1,6 +1,6 @@
 class ComponentsController < ApplicationController
   before_action :set_product
-  before_action :set_component, only: [:show, :update, :destroy]
+  before_action :set_component, only: [ :show, :update, :destroy ]
 
   def index
     @components = @product.components
@@ -48,7 +48,7 @@ class ComponentsController < ApplicationController
     params.require(:component).permit(
       :name,
       :image,
-      variants_attributes: [:name, :price, :stock, :image]
+      variants_attributes: [ :name, :price, :stock, :image ],
     )
   end
 end
