@@ -1,5 +1,6 @@
 "use client";
 
+import ProductComponent from "@/app/components/ProductComponent";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -70,6 +71,31 @@ async function fetchProductData(productId: string): Promise<Product> {
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
+  const [selectedVariants, setSelectedVariants] = useState<
+    Record<number, number>
+  >({});
+
+  const handleSelectVariant = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    componentId: number,
+    variantId: number,
+  ) => {
+    e.preventDefault();
+    const isSelected = selectedVariants[componentId] === variantId;
+
+    setSelectedVariants((prev) => {
+      if (isSelected) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { [componentId]: _, ...rest } = prev;
+        return rest;
+      }
+
+      return {
+        ...prev,
+        [componentId]: variantId,
+      };
+    });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -119,37 +145,12 @@ const ProductPage = () => {
                 </h2>
                 <div className="space-y-6">
                   {product.components.map((component) => (
-                    <div
+                    <ProductComponent
                       key={component.id}
-                      className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md"
-                    >
-                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                        {component.name}
-                      </h3>
-                      <p className="text-gray-600 dark:text-gray-400">
-                        {component.description}
-                      </p>
-                      <div className="mt-4">
-                        <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
-                          Variants
-                        </h4>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-                          {component.variants.map((variant) => (
-                            <div
-                              key={variant.id}
-                              className="p-3 border dark:border-gray-700 rounded-lg flex justify-between items-center bg-gray-50 dark:bg-gray-700"
-                            >
-                              <span className="text-gray-900 dark:text-white">
-                                {variant.name}
-                              </span>
-                              <span className="font-bold text-gray-900 dark:text-white">
-                                ${variant.price}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
+                      component={component}
+                      selectedVariants={selectedVariants}
+                      handleSelectVariant={handleSelectVariant}
+                    />
                   ))}
                 </div>
               </div>
