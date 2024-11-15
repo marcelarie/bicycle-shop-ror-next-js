@@ -1,15 +1,4 @@
-interface Variant {
-  id: number;
-  name: string;
-  price: number;
-}
-
-interface Component {
-  id: number;
-  name: string;
-  description: string;
-  variants: Variant[];
-}
+import { Component, Variant } from "../product/[id]/page";
 
 type Props = {
   component: Component;

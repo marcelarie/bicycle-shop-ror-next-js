@@ -1,19 +1,7 @@
 "use client";
 
 import ProductVariant from "./ProductVariant";
-
-interface Variant {
-  id: number;
-  name: string;
-  price: number;
-}
-
-interface Component {
-  id: number;
-  name: string;
-  description: string;
-  variants: Variant[];
-}
+import { Component } from "../product/[id]/page";
 
 type Props = {
   component: Component;

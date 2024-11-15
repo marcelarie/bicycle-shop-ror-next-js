@@ -1,23 +1,24 @@
 "use client";
 
+import Cart from "@/app/components/Cart";
 import ProductComponent from "@/app/components/ProductComponent";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-interface Variant {
+export interface Variant {
   id: number;
   name: string;
   price: number;
 }
 
-interface Component {
+export interface Component {
   id: number;
   name: string;
   description: string;
   variants: Variant[];
 }
 
-interface Product {
+export interface Product {
   id: number;
   name: string;
   description: string;
@@ -74,6 +75,7 @@ const ProductPage = () => {
   const [selectedVariants, setSelectedVariants] = useState<
     Record<number, number>
   >({});
+  const [hasAddedToCart, setHasAddedToCart] = useState(false);
   const isCartDisabled =
     Object.keys(selectedVariants).length !== product?.components.length;
 
@@ -99,6 +101,28 @@ const ProductPage = () => {
     });
   };
 
+  const handleAddToCart = () => {
+    if (isCartDisabled) {
+      return;
+    }
+    const cart = sessionStorage.getItem("cart");
+
+    if (cart) {
+      const parsedCart = JSON.parse(cart);
+      if (Array.isArray(parsedCart)) {
+        sessionStorage.setItem(
+          "cart",
+          JSON.stringify([...parsedCart, product]),
+        );
+      }
+    } else {
+      sessionStorage.setItem("cart", JSON.stringify([product]));
+    }
+
+    setHasAddedToCart(true);
+    alert("Added to cart!");
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const data = await fetchProductData(id);
@@ -118,56 +142,59 @@ const ProductPage = () => {
 
   try {
     return (
-      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 py-8">
+      <div className="min-h-screen bg-gray-100 py-8 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
         <div className="container mx-auto">
-          <div className="flex flex-col lg:flex-row items-start gap-8">
-            <div className="lg:w-1/3 w-full flex justify-center">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={product.image}
-                alt={product.name}
-                className="h-auto rounded-md w-full"
-              />
-            </div>
+          <Cart reload={hasAddedToCart} />
+          <div className="container mx-auto">
+            <div className="flex flex-col lg:flex-row items-start gap-8">
+              <div className="lg:w-1/3 w-full flex justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="h-auto rounded-md w-full"
+                />
+              </div>
 
-            <div className="lg:w-2/3 w-full">
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                {product.name}
-              </h1>
-              <p className="text-gray-700 dark:text-gray-300 mb-6">
-                {product.description}
-              </p>
-              <p className="text-lg font-bold text-gray-900 dark:text-white mb-8">
-                ${product.price}
-              </p>
+              <div className="lg:w-2/3 w-full">
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                  {product.name}
+                </h1>
+                <p className="text-gray-700 dark:text-gray-300 mb-6">
+                  {product.description}
+                </p>
+                <p className="text-lg font-bold text-gray-900 dark:text-white mb-8">
+                  ${product.price}
+                </p>
 
-              <div>
-                <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">
-                  Components
-                </h2>
-                <div className="space-y-6">
-                  {product.components.map((component) => (
-                    <ProductComponent
-                      key={component.id}
-                      component={component}
-                      selectedVariants={selectedVariants}
-                      handleSelectVariant={handleSelectVariant}
-                    />
-                  ))}
+                <div>
+                  <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">
+                    Components
+                  </h2>
+                  <div className="space-y-6">
+                    {product.components.map((component) => (
+                      <ProductComponent
+                        key={component.id}
+                        component={component}
+                        selectedVariants={selectedVariants}
+                        handleSelectVariant={handleSelectVariant}
+                      />
+                    ))}
+                  </div>
+                  <button
+                    disabled={isCartDisabled}
+                    className="bg-blue-500 text-white py-2 px-4 mt-8 w-full rounded-md"
+                    onClick={handleAddToCart}
+                    style={{
+                      backgroundColor: isCartDisabled ? "#A0AEC0" : "#2563EB",
+                      color: isCartDisabled ? "#CBD5E0" : "#FFFFFF",
+                      cursor: isCartDisabled ? "not-allowed" : "pointer",
+                      opacity: isCartDisabled ? 0.6 : 1,
+                    }}
+                  >
+                    Add to Cart
+                  </button>
                 </div>
-                <button
-                  disabled={isCartDisabled}
-                  className="bg-blue-500 text-white py-2 px-4 mt-8 w-full rounded-md"
-                  onClick={() => alert("Added to cart")}
-                  style={{
-                    backgroundColor: isCartDisabled ? "#A0AEC0" : "#2563EB",
-                    color: isCartDisabled ? "#CBD5E0" : "#FFFFFF",
-                    cursor: isCartDisabled ? "not-allowed" : "pointer",
-                    opacity: isCartDisabled ? 0.6 : 1,
-                  }}
-                >
-                  Add to Cart
-                </button>
               </div>
             </div>
           </div>
