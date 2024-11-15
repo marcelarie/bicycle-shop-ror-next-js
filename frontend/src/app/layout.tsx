@@ -32,12 +32,20 @@ export default function RootLayout({
         <h1 className="text-3xl font-bold text-center m-8">
           Marcus&apos; Bike Shop
         </h1>
-        <Link
-          href="/"
-          className="block bg-gray-800 text-white py-2 px-4 rounded-md text-center"
-        >
-          {"⬅️ Back to Home"}
-        </Link>
+        <div className="flex justify-center space-x-4 mb-4">
+          <Link
+            href="/"
+            className="block bg-gray-800 text-white py-2 px-4 rounded-md text-center"
+          >
+            {"⬅️ Back to Home"}
+          </Link>
+          <Link
+            href="/admin"
+            className="block bg-gray-800 text-white py-2 px-4 rounded-md text-center"
+          >
+            {"🔒 Admin"}
+          </Link>
+        </div>
         {children}
       </body>
     </html>
