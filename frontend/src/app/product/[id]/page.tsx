@@ -74,6 +74,8 @@ const ProductPage = () => {
   const [selectedVariants, setSelectedVariants] = useState<
     Record<number, number>
   >({});
+  const isCartDisabled =
+    Object.keys(selectedVariants).length !== product?.components.length;
 
   const handleSelectVariant = (
     e: React.MouseEvent<HTMLButtonElement>,
@@ -153,6 +155,19 @@ const ProductPage = () => {
                     />
                   ))}
                 </div>
+                <button
+                  disabled={isCartDisabled}
+                  className="bg-blue-500 text-white py-2 px-4 mt-8 w-full rounded-md"
+                  onClick={() => alert("Added to cart")}
+                  style={{
+                    backgroundColor: isCartDisabled ? "#A0AEC0" : "#2563EB",
+                    color: isCartDisabled ? "#CBD5E0" : "#FFFFFF",
+                    cursor: isCartDisabled ? "not-allowed" : "pointer",
+                    opacity: isCartDisabled ? 0.6 : 1,
+                  }}
+                >
+                  Add to Cart
+                </button>
               </div>
             </div>
           </div>
