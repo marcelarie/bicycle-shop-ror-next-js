@@ -6,6 +6,35 @@ import { Component, Product, Variant } from "@/types";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
+const transactionPurchase = async (
+  items: {
+    product_id: number;
+    quantity: number;
+    variant_ids: number[];
+  }[],
+) => {
+  try {
+    const response = await fetch(
+      "http://localhost:3000/transactions/purchase",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ items }),
+      },
+    );
+    if (!response.ok) {
+      throw new Error("Purchase request failed");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Purchase error:", error);
+    return { success: false, error: "Failed to purchase items" };
+  }
+};
+
 const validateVariant = async (variantId: number): Promise<number[]> => {
   try {
     const response = await fetch(
@@ -197,10 +226,44 @@ const ProductPage = () => {
     }
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (isCartDisabled) {
       return;
     }
+
+    const selectedVariantIds = Object.values(selectedVariants);
+
+    const validateCombination = async () => {
+      const conflictingVariants =
+        await validateVariantsCombination(selectedVariantIds);
+
+      return conflictingVariants.length === 0;
+    };
+
+    const isValidCombination = validateCombination();
+
+    if (!isValidCombination) {
+      alert("Invalid combination of variants");
+      return;
+    }
+
+    // This is an example of how the purchase flow would work
+    // if the combination is valid, do a call to transaction/purchase to see it the purchase is valid
+    // this would go later in another step of the process (before buying from the cart)
+    const items = [
+      {
+        product_id: Number(id),
+        quantity: 1,
+        variant_ids: selectedVariantIds,
+      },
+    ];
+    const purchaseResult = await transactionPurchase(items);
+
+    if (!purchaseResult.success) {
+      alert(purchaseResult.error);
+      return;
+    }
+
     const cart = sessionStorage.getItem("cart");
 
     if (cart) {

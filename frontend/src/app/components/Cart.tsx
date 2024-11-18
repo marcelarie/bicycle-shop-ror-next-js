@@ -1,5 +1,5 @@
+import { Product } from "@/types";
 import { useEffect, useState } from "react";
-import { Product } from "../page";
 
 const Cart = ({ reload }: { reload: boolean }) => {
   const [cart, setCart] = useState<Product[]>([]);
