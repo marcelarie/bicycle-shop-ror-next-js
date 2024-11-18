@@ -1,6 +1,31 @@
 # Shop App
 
-This repository contains a simple ecommerce application. The initial focus is on bicycles as the main product, but the architecture is designed to be extensible for other types of products in the future.
+This repository contains a simple ecommerce application. The initial focus is on
+bicycles as the main product, but the architecture is designed to be extensible
+for other types of products in the future.
+
+It used Ruby on Rails for the backend and Next.js for the frontend.
+
+## Installation
+
+Clone the repository and use `make` to install dependencies:
+
+```bash
+git clone https://github.com/marcelarie/bicycle-shop-ror-next-js.git
+cd bicycle-shop-ror-next-js
+make install
+```
+
+## Running the Project
+
+Run both the backend and frontend services:
+
+```bash
+make run
+```
+
+- The backend runs on port `3000`.
+- The frontend runs on port `4000`.
 
 ## Features
 
@@ -142,27 +167,6 @@ end
 
 Currently the page uses the product endpoint to create and update products,
 including the components and variants.
-
-## Installation
-
-Clone the repository and use `make` to install dependencies:
-
-```bash
-git clone https://github.com/marcelarie/bicycle-shop-ror-next-js.git
-cd bicycle-shop-ror-next-js
-make install
-```
-
-## Running the Project
-
-Run both the backend and frontend services:
-
-```bash
-make run
-```
-
-- The backend runs on port `3000`.
-- The frontend runs on port `4000`.
 
 ## Key Tradeoffs, Assumptions, and Decisions
 
