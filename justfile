@@ -1,6 +1,19 @@
 # Just command runner installation:
 # https://github.com/casey/just?tab=readme-ov-file#installation
 
+install: 
+    echo "Installing dependencies..."
+    just be_install
+    just fe_install
+
+be_install:
+    echo "Installing backend dependencies..."
+    cd backend && bundle install
+
+fe_install:
+    echo "Installing frontend dependencies..."
+    cd frontend && pnpm install
+
 run:
     echo "Running Rails backend on localhost:3000"
     just be_run &
