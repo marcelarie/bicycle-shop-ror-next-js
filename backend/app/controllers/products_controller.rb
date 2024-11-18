@@ -46,13 +46,17 @@ class ProductsController < ApplicationController
                                     :stock,
                                     :image,
                                     components_attributes: [
+                                      :id,
                                       :name,
                                       :image,
+                                      :_destroy,
                                       variants_attributes: [
+                                        :id,
                                         :name,
                                         :price,
                                         :stock,
-                                        :image
+                                        :image,
+                                        :_destroy
                                       ]
                                     ])
   end

@@ -12,5 +12,5 @@ class Component < ApplicationRecord
             },
             allow_blank: true
 
-  accepts_nested_attributes_for :variants
+  accepts_nested_attributes_for :variants, allow_destroy: true
 end
