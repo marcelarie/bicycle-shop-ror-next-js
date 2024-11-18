@@ -1,3 +1,6 @@
+# Just command runner installation:
+# https://github.com/casey/just?tab=readme-ov-file#installation
+
 run:
     echo "Running Rails backend on localhost:3000"
     just be_run &
@@ -13,7 +16,7 @@ fe_run:
     echo "Starting Next.js frontend..."
     cd frontend && pnpm dev --port 4000
 
-console:
+c:
     cd backend && rails c
 
 rebuild-db:
