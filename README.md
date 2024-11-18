@@ -8,12 +8,12 @@ It used Ruby on Rails for the backend and Next.js for the frontend.
 
 ## Installation
 
-Clone the repository and use `make` to install dependencies:
+Clone the repository and use `make` or `just` to install dependencies:
 
 ```bash
 git clone https://github.com/marcelarie/bicycle-shop-ror-next-js.git
 cd bicycle-shop-ror-next-js
-make install
+make install # or `just install` if you have Just installed
 ```
 
 ## Running the Project
@@ -21,7 +21,7 @@ make install
 Run both the backend and frontend services:
 
 ```bash
-make run
+make run # or `just run`
 ```
 
 - The backend runs on port `3000`.
