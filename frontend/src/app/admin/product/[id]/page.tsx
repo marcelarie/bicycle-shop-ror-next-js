@@ -17,7 +17,7 @@ const EditProduct = () => {
     components: [],
   });
 
-  console.log({ formData });
+  console.log(formData);
 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -77,8 +77,8 @@ const EditProduct = () => {
         id: formData.id,
         name: formData.name,
         description: formData.description,
-        price: parseFloat(formData.price),
-        stock: parseInt(formData.stock),
+        price: formData.price,
+        stock: formData.stock,
         image: formData.image,
         components_attributes: formData.components.map((component) => ({
           id: component.id,

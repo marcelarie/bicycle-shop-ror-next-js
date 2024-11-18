@@ -328,7 +328,7 @@ const ProductPage = () => {
                   {product.description}
                 </p>
                 <p className="text-lg font-bold text-gray-900 dark:text-white mb-8">
-                  ${product.price}
+                  {product.price}€
                 </p>
 
                 <div>
