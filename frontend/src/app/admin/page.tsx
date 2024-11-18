@@ -1,6 +1,6 @@
 "use client";
 
-import { Component } from "@/types";
+import { Component, FormComponent } from "@/types";
 import { useState } from "react";
 
 interface FormData {
@@ -9,7 +9,7 @@ interface FormData {
   price: string;
   image: string;
   stock: string;
-  components: Component[];
+  components: FormComponent[];
 }
 
 const Admin = () => {
@@ -37,8 +37,8 @@ const Admin = () => {
           image: component.image,
           variants_attributes: component.variants.map((variant) => ({
             name: variant.name,
-            price: parseFloat(variant.price),
-            stock: parseInt(variant.stock),
+            price: variant.price,
+            stock: variant.stock,
             image: variant.image,
           })),
         })),
@@ -374,6 +374,7 @@ const Admin = () => {
                     {
                       name: "",
                       image: "",
+                      description: "",
                       variants: [],
                     },
                   ],

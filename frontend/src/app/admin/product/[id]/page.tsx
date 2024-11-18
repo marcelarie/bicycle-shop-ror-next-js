@@ -2,28 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { Component, Variant } from "@/types";
-
-interface FormData {
-  id: number;
-  name: string;
-  description: string;
-  price: string;
-  image: string;
-  stock: string;
-  components: Array<
-    Component & {
-      _destroy?: boolean;
-      variants: Array<
-        Variant & {
-          _destroy?: boolean;
-          price: string;
-          stock: string;
-        }
-      >;
-    }
-  >;
-}
+import { Component, Variant, FormData } from "@/types";
 
 const EditProduct = () => {
   const { id: productId } = useParams();
@@ -106,15 +85,14 @@ const EditProduct = () => {
           name: component.name,
           image: component.image,
           _destroy: component._destroy || false,
-          variants_attributes: component.variants
-            .map((variant) => ({
-              id: variant.id,
-              name: variant.name,
-              price: variant.price,
-              stock: variant.stock,
-              image: variant.image,
-              _destroy: variant._destroy || false,
-            })),
+          variants_attributes: component.variants.map((variant) => ({
+            id: variant.id,
+            name: variant.name,
+            price: variant.price,
+            stock: variant.stock,
+            image: variant.image,
+            _destroy: variant._destroy || false,
+          })),
         })),
       },
     };
@@ -186,6 +164,7 @@ const EditProduct = () => {
   ) => {
     const newComponents = [...formData.components];
     newComponents[compIndex].variants[varIndex][field] = value;
+
     setFormData((prev) => ({
       ...prev,
       components: newComponents,
@@ -193,17 +172,20 @@ const EditProduct = () => {
   };
 
   const addComponent = () => {
-    setFormData((prev) => ({
-      ...prev,
-      components: [
-        ...prev.components,
-        {
-          name: "",
-          image: "",
-          variants: [],
-        },
-      ],
-    }));
+    setFormData((prev) => {
+      return {
+        ...prev,
+        components: [
+          ...prev.components,
+          {
+            name: "",
+            description: "",
+            image: "",
+            variants: [],
+          },
+        ],
+      };
+    });
   };
 
   const removeComponent = (index: number) => {
