@@ -1,15 +1,15 @@
+# Validates product variant combinations using a hash of incompatible pairs
+# Format: variant_id_to_check => [incompatible_variant_ids]
 class Validate < ApplicationRecord
   # Hardcoded validation rules for now
   VARIANT_RULES = {
-    # Mountain Bike Wheels
+    # Big wheel
     1 => [
-      22, # Full Suspension
-      4  # Wide Tires
+      3  # Leather seat
     ],
-    # Big rim
+    # Small wheel
     2 => [
-      102, # 29" Rim
-      33 # Carbon Fiber
+      4 # Basic seat
     ]
   }
 
