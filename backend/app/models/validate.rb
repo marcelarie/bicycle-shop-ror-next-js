@@ -15,6 +15,12 @@ class Validate < ApplicationRecord
 
   # Validate individual variant combinations
   def self.validate_component(variant_id)
-    VARIANT_RULES[variant_id] || []
+    direct_incompatibles = VARIANT_RULES[variant_id] || []
+
+    reverse_incompatibles = VARIANT_RULES.select { |_, incompatibles|
+      incompatibles.include?(variant_id)
+    }.keys
+
+    (direct_incompatibles + reverse_incompatibles).uniq
   end
 end
