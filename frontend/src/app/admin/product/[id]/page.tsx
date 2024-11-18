@@ -11,13 +11,18 @@ interface FormData {
   price: string;
   image: string;
   stock: string;
-  components: Array<Component & {
-    _destroy?: boolean;
-    variants: Array<Variant & {
-      _destroy?: boolean; price: string;
-      stock: string;
-    }>;
-  }>;
+  components: Array<
+    Component & {
+      _destroy?: boolean;
+      variants: Array<
+        Variant & {
+          _destroy?: boolean;
+          price: string;
+          stock: string;
+        }
+      >;
+    }
+  >;
 }
 
 const EditProduct = () => {
@@ -32,6 +37,8 @@ const EditProduct = () => {
     stock: "",
     components: [],
   });
+
+  console.log({ formData });
 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -94,24 +101,21 @@ const EditProduct = () => {
         price: parseFloat(formData.price),
         stock: parseInt(formData.stock),
         image: formData.image,
-        components_attributes: formData.components
-          .filter((comp) => !comp._destroy)
-          .map((component) => ({
-            id: component.id,
-            name: component.name,
-            image: component.image,
-            _destroy: component._destroy || false,
-            variants_attributes: component.variants
-              .filter((varnt) => !varnt._destroy)
-              .map((variant) => ({
-                id: variant.id,
-                name: variant.name,
-                price: parseFloat(variant.price),
-                stock: parseInt(variant.stock),
-                image: variant.image,
-                _destroy: variant._destroy || false,
-              })),
-          })),
+        components_attributes: formData.components.map((component) => ({
+          id: component.id,
+          name: component.name,
+          image: component.image,
+          _destroy: component._destroy || false,
+          variants_attributes: component.variants
+            .map((variant) => ({
+              id: variant.id,
+              name: variant.name,
+              price: variant.price,
+              stock: variant.stock,
+              image: variant.image,
+              _destroy: variant._destroy || false,
+            })),
+        })),
       },
     };
 
@@ -127,13 +131,22 @@ const EditProduct = () => {
         },
       );
 
+      const responseJson = await response.json();
+
       if (!response.ok) {
-        throw new Error("Failed to update the product.");
+        const errors =
+          responseJson["components.variants"] ||
+          responseJson["components"] ||
+          [];
+
+        if (errors.length) {
+          throw new Error(errors.join("\n"));
+        } else {
+          throw new Error("Failed to update the product.");
+        }
       }
 
-      const updatedProduct = await response.json();
-
-      window.location.href = `/product/${updatedProduct.id}`;
+      window.location.href = `/product/${responseJson.id}`;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -224,7 +237,10 @@ const EditProduct = () => {
 
   const removeVariant = (compIndex: number, varIndex: number) => {
     const newComponents = [...formData.components];
-    if (newComponents[compIndex].variants[varIndex].id) {
+    const variant = newComponents[compIndex].variants[varIndex];
+    console.log(variant);
+
+    if (variant.id) {
       // Mark for deletion if it exists on the server
       newComponents[compIndex].variants[varIndex]._destroy = true;
     } else {

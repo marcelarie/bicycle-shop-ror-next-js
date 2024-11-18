@@ -4,6 +4,7 @@ export interface Variant {
   price: number;
   stock: number;
   image: string;
+  _destroy?: boolean;
 }
 
 export interface Component {
@@ -12,6 +13,7 @@ export interface Component {
   description: string;
   variants: Variant[];
   image: string;
+  _destroy?: boolean;
 }
 
 export interface Product {
