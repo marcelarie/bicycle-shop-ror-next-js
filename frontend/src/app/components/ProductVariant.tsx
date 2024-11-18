@@ -51,7 +51,7 @@ const ProductVariant = ({
         <div className="flex flex-row items-center space-x-2">
           <span className="text-gray-900 dark:text-white">{variant.name}</span>
           <span className="font-bold text-gray-900 dark:text-white">
-            ${variant.price}
+            {Number(variant.price).toFixed(2)}€
           </span>
         </div>
       </button>
