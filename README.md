@@ -1,121 +1,190 @@
 # Shop App
 
-This will be a simple ecommerce app. It will have bicycles as the main product
-but it should be extensible to have other products in the future.
+This repository contains a simple ecommerce application. The initial focus is on bicycles as the main product, but the architecture is designed to be extensible for other types of products in the future.
 
-It will have two main pages:
+## Features
 
-1. Public shop page
+### Public Shop Page
 
-   - [x] Lists the products
-   - [x] Customize each product
-   - [x] Cart that displays the bikes
+- [x] Lists available products
+- [x] Customize products with components and variants
+- [x] Displays the selected items (future cart functionality)
 
-2. Admin page
-   - [x] Create bikes
-   - [x] Delete bikes
-   - [x] Manage stock and product parts
+### Admin Page
 
-**Important note:**
-No need for auth, checkout or a design.
+- [x] Create, update, and delete products, components, and variants
+- [x] Manage stock for products and variants
+- [x] Validate prohibited combinations client-side
+- [ ] Revalidate combinations server-side
 
-## Products
+## Product Architecture
 
-Product class:
+### **Product Class**
 
-- id
-- name
-- description
-- price
-- components -> with its own class
-- image
-- stock
+- `id`
+- `name`
+- `description`
+- `price`
+- `image`
+- `stock`
+- `components` (relation to Component)
 
-Component class -> related to Product:
+### **Component Class**
 
-- id
-- name
-- description
-- image
+- `id`
+- `name`
+- `description`
+- `image`
+- `variants` (relation to Variant)
 
-Variant class -> related to Component:
+### **Variant Class**
 
-- id
-- name
-- description
-- price (we deleted price from the components to have it on each variant)
-- image
-- stock
+- `id`
+- `name`
+- `description`
+- `price`
+- `image`
+- `stock`
 
-**Note:**
-No need to have stock as its own class, given that the stock needs to be managed
-by each variant and there is only one store for the moment.
+### Stock Management
 
-# Cart
+Stock is managed on both the `Product` and `Variant` levels:
 
-The cart will be a simple list of the products that the user has added to it.
-There is no need for a checkout or a payment system.
+- Admins can update stock directly through the Admin page.
+- Stock decreases automatically with each purchase.
 
-1. The user selects a combination of components with a product
-2. The cart will handle this combination
-3. In the future there will be a validation step
+**Note:** Stock does not have its own class, for now we only need to update the
+stock of products and variants with each request and via the Admin page.
 
-**NOTE:**
-For now the Cart will not be implemented, the validation endpoint is enough.
+## Validation System
 
-## Validation
+Validation ensures that only valid product and variant combinations are
+selectable. This is implemented via:
 
-A product has multiple components
-Each component has multiple variants
+1. **Variant Validation Endpoint**
 
-The user can select multiple components per product and one variant per component
+   - Validates the compatibility of selected variants with other variants in the
+     product.
+   - Returns a list of conflicts for the selected variant.
 
-Steps:
+2. **Combination Validation Endpoint**
+   - Validates the entire selection of components and variants for a product.
+   - Prevents invalid combinations from being added to the cart.
 
-1. User selects a product
-2. Selects a component
-3. Selects a variant
-4. Then all the other combinations that are not valid appear as disabled
+**Hardcoded Rules:**
+Validation rules are currently hardcoded for now.
+In the future it would be really simple to change the validate class to use some
+type of table of rules that are updated by the admin user.
 
-## Stock management
+The current rules are this ones:
 
-The stock management will be handled by products and variants.
+```ruby
+class Validate < ApplicationRecord
+  VARIANT_RULES = {
+    1 => [ 3 ],
+    2 => [ 4 ]
+  }
+```
 
-- [x] The stock will be updated when is bought.
-- [x] The admin will manage the stock
-- [ ] Client-side validation for prohibited combinations
-- [ ] Revalidate cart items in the FE and BE
+To test this the user can create 4 variants, 2 for the first component, and
+another 2 variants for the second component.
+
+This would be the product structure:
+
+```
+Product 1
+  Component 1
+    Variant 1
+    Variant 2
+  Component 2
+    Variant 3
+    Variant 4
+```
+
+Selecting Variant 1 will disable Variant 3, demonstrating the rules in action.
+
+## Cart Functionality
+
+The cart is omitted in as a class in the backend for this version, instead:
+
+- Users select combinations of components and variants.
+- Validation ensures that combinations are valid before displaying them.
+- The cart is saved in the client side.
+
+In a future implementation the Cart would be a class that would store the selected
+items.
 
 ## Admin
 
-The admin page should be simple:
+Given that the admin was not needed to be authenticated, the admin routes are
+not implemented. In the future the admin routes would be protected by some type
+of auth and the admin would be able to create, update and delete products,
+components and variants.
 
-1. No need for auth
-2. Create products, components and variants
-3. Delete products, components and variants
-4. Manage stock
-5. Update variants
-
-There is no need to create and Admin class if there is no auth for now.
-When the auth is needed the endpoints could move to a Admin/namespace subclass.
-For now we can use the endpoints as they are.
+This would be the admin routes:
 
 ```ruby
-# routes.rb
 namespace :admin do
- post "products", to: "products#create"
- delete "products/:id", to: "products#destroy"
- patch "products/:id/stock", to: "products#update_stock"
+  post "products", to: "products#create"
+  delete "products/:id", to: "products#destroy"
+  patch "products/:id/stock", to: "products#update_stock"
 
- post "products/:product_id/components", to: "components#create"
- delete "components/:id", to: "components#destroy"
- patch "components/:id/stock", to: "components#update_stock"
+  post "products/:product_id/components", to: "components#create"
+  delete "components/:id", to: "components#destroy"
+  patch "components/:id/stock", to: "components#update_stock"
 
- post "components/:component_id/variants", to: "variants#create"
- delete "variants/:id", to: "variants#destroy"
- patch "variants/:id", to: "variants#update"
- patch "variants/:id/stock", to: "variants#update_stock"
+  post "components/:component_id/variants", to: "variants#create"
+  delete "variants/:id", to: "variants#destroy"
+  patch "variants/:id", to: "variants#update"
+  patch "variants/:id/stock", to: "variants#update_stock"
 end
-
-# rest of the routes for non admins
 ```
+
+Currently the page uses the product endpoint to create and update products,
+including the components and variants.
+
+## Installation
+
+Clone the repository and use `make` to install dependencies:
+
+```bash
+git clone https://github.com/marcelarie/bicycle-shop-ror-next-js.git
+cd bicycle-shop-ror-next-js
+make install
+```
+
+## Running the Project
+
+Run both the backend and frontend services:
+
+```bash
+make run
+```
+
+- The backend runs on port `3000`.
+- The frontend runs on port `4000`.
+
+## Key Tradeoffs, Assumptions, and Decisions
+
+1. **Hardcoded Rules:**
+
+   - Current validation rules are hardcoded.
+   - It would be easy to implement in the future because of how the Validation
+     code is separated.
+
+2. **No Authentication:**
+
+   - This was specified in the requirements.
+
+3. **Minimal Cart:**
+
+   - No need for Cart in the Backend, it is handled in the client side.
+
+4. **Frontend and Backend Separation:**
+
+   - Backend handles data validation, stock management, and business logic.
+   - Frontend focuses on user interactions for the shop and admin pages.
+
+5. **No Stock Model:**
+   - Stock is managed directly on `Product` and `Variant` classes.
+   - Simplifies the implementation given the current requirements.
