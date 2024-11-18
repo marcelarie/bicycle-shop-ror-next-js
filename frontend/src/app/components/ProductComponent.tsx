@@ -12,12 +12,14 @@ type Props = {
     variantId: number,
     variantPrice: number,
   ) => void;
+  disabledVariants: number[];
 };
 
 const ProductComponent = ({
   component,
   selectedVariants,
   handleSelectVariant,
+  disabledVariants,
 }: Props) => {
   return (
     <div
@@ -42,6 +44,7 @@ const ProductComponent = ({
                 component={component}
                 selected={selected}
                 handleSelectVariant={handleSelectVariant}
+                disabledVariants={disabledVariants}
               />
             );
           })}

@@ -6,6 +6,57 @@ import { Component, Product, Variant } from "@/types";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
+const validateVariant = async (variantId: number): Promise<number[]> => {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/validate/variant/${variantId}`,
+    );
+
+    if (!response.ok) {
+      throw new Error("Validation request failed");
+    }
+
+    // Expected response format:
+    // { "invalid_variants": [3, 4, 5] }
+    const data = await response.json();
+    return (
+      data.invalid_variants.map((v: { id: number; name: string }) => v.id) || []
+    );
+  } catch (error) {
+    console.error("Validation error:", error);
+    return [];
+  }
+};
+
+const validateVariantsCombination = async (variantIds: number[]) => {
+  try {
+    const response = await fetch(`http://localhost:3000/validate/combination`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ids: variantIds,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Validation request failed");
+    }
+
+    // Expected response format:
+    // {
+    //   valid: boolean,
+    //   conflicting_variants: number[]
+    // }
+    const data = await response.json();
+    return data.conflicting_variants;
+  } catch (error) {
+    console.error("Validation error:", error);
+    return [];
+  }
+};
+
 async function fetchProductData(productId: string): Promise<Product> {
   const productRes = await fetch(
     `http://localhost:3000/products/${productId}`,
@@ -65,6 +116,7 @@ const ProductPage = () => {
   const [selectedVariants, setSelectedVariants] = useState<
     Record<number, number>
   >({});
+  const [disabledVariants, setDisabledVariants] = useState<number[]>([]);
   const [hasAddedToCart, setHasAddedToCart] = useState(false);
   const isCartDisabled =
     Object.keys(selectedVariants).length !== product?.components.length;
@@ -97,7 +149,7 @@ const ProductPage = () => {
     return basePrice + variantsTotal;
   };
 
-  const handleSelectVariant = (
+  const handleSelectVariant = async (
     e: React.MouseEvent<HTMLButtonElement>,
     componentId: number,
     variantId: number,
@@ -105,41 +157,43 @@ const ProductPage = () => {
   ) => {
     e.preventDefault();
     const isSelected = selectedVariants[componentId] === variantId;
+    const updatedSelectedVariants: { [key: number]: number } = {
+      ...selectedVariants,
+    };
 
-    if (isSelected) {
-      setSelectedVariants((prev) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { [componentId]: _, ...rest } = prev;
-
-        const newTotal = calculateTotalPrice(rest);
-
-        setPriceState((prevState) => ({
-          ...prevState,
+    try {
+      if (isSelected) {
+        delete updatedSelectedVariants[componentId];
+        const newTotal = calculateTotalPrice(updatedSelectedVariants);
+        setPriceState({
           price: newTotal,
           lastComponentId: 0,
           lastPrice: 0,
-        }));
-
-        return rest;
-      });
-    } else {
-      setSelectedVariants((prev) => {
-        const newVariants = {
-          ...prev,
-          [componentId]: variantId,
-        };
-
-        const newTotal = calculateTotalPrice(newVariants);
-
-        setPriceState((prevState) => ({
-          ...prevState,
+        });
+      } else {
+        updatedSelectedVariants[componentId] = variantId;
+        const newTotal = calculateTotalPrice(updatedSelectedVariants);
+        setPriceState({
           price: newTotal,
           lastComponentId: componentId,
           lastPrice: variantPrice,
-        }));
+        });
+      }
 
-        return newVariants;
-      });
+      setSelectedVariants(updatedSelectedVariants);
+
+      const selectedVariantIds = Object.values(updatedSelectedVariants);
+      const invalidVariantsArrays = await Promise.all(
+        selectedVariantIds.map((id) => validateVariant(id)),
+      );
+      const allInvalidVariants = Array.from(
+        new Set(invalidVariantsArrays.flat()),
+      );
+      setDisabledVariants(
+        allInvalidVariants.filter((id) => !selectedVariantIds.includes(id)),
+      );
+    } catch (error) {
+      console.error("Failed to select variant:", error);
     }
   };
 
@@ -225,6 +279,7 @@ const ProductPage = () => {
                         component={component}
                         selectedVariants={selectedVariants}
                         handleSelectVariant={handleSelectVariant}
+                        disabledVariants={disabledVariants}
                       />
                     ))}
                   </div>

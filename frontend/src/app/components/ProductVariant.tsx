@@ -10,6 +10,7 @@ type Props = {
     variantId: number,
     variantPrice: number,
   ) => void;
+  disabledVariants: number[];
 };
 
 const ProductVariant = ({
@@ -17,7 +18,10 @@ const ProductVariant = ({
   variant,
   selected,
   handleSelectVariant,
+  disabledVariants,
 }: Props) => {
+  const isDisabled = disabledVariants.includes(variant.id);
+
   return (
     <div className="flex flex-col items-center justify-center space-y-2">
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -37,6 +41,12 @@ const ProductVariant = ({
         onClick={(e) =>
           handleSelectVariant(e, component.id, variant.id, variant.price)
         }
+        style={{
+          backgroundColor: isDisabled ? "#A0AEC0" : selected ? "#2563EB" : "",
+          color: isDisabled ? "#CBD5E0" : selected ? "#FFFFFF" : "",
+          cursor: isDisabled ? "not-allowed" : "pointer",
+        }}
+        disabled={isDisabled}
       >
         <div className="flex flex-row items-center space-x-2">
           <span className="text-gray-900 dark:text-white">{variant.name}</span>
