@@ -1,9 +1,9 @@
 "use client";
 
-import { Component, FormComponent } from "@/types";
+import { FormComponent } from "@/types";
 import { useState } from "react";
 
-interface FormData {
+interface AdminFormData {
   name: string;
   description: string;
   price: string;
@@ -13,7 +13,7 @@ interface FormData {
 }
 
 const Admin = () => {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<AdminFormData>({
     name: "",
     description: "",
     price: "",
@@ -24,13 +24,12 @@ const Admin = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Implement POST request to /products here
     const requestBody = {
       product: {
         name: formData.name,
         description: formData.description,
-        price: parseFloat(formData.price),
-        stock: parseInt(formData.stock),
+        price: formData.price,
+        stock: formData.stock,
         image: formData.image,
         components_attributes: formData.components.map((component) => ({
           name: component.name,
